@@ -25,7 +25,6 @@ public class ClienteGUI extends javax.swing.JFrame {
         initComponents();
         this.atualizarTabelaCliente();
         this.setSize(1080,720);
-        this.getContentPane().setBackground(Color.decode("#D9C7B8"));
         this.setVisible(true);
     }
 
@@ -231,6 +230,11 @@ public class ClienteGUI extends javax.swing.JFrame {
         });
 
         inicioBnt.setText("Início");
+        inicioBnt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inicioBntActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -407,6 +411,11 @@ public class ClienteGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel6MouseClicked
 
+    private void inicioBntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioBntActionPerformed
+       new FrMenu();
+       this.dispose();
+    }//GEN-LAST:event_inicioBntActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -469,8 +478,7 @@ public class ClienteGUI extends javax.swing.JFrame {
     private javax.swing.JTextField telefoneTxt;
     // End of variables declaration//GEN-END:variables
     private ClienteController cliController = new ClienteController();
-    private static final int ATUALIZAR = 0;
-    private static final int INSERIR = 1;
+    
     
     private void atualizarTabelaCliente(){  
         clienteTable.setModel(cliController.atualizarTabela());

@@ -446,6 +446,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="In&#xed;cio"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inicioBntActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
