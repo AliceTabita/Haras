@@ -214,9 +214,9 @@ public class EditEventoDialog extends javax.swing.JDialog {
             case JOptionPane.YES_OPTION : 
                 //caso seja sim save ou update
                 if(this.acao == ATUALIZAR){
-                    EventoController.atualizarEvento(mapCamposParaObjeto());
+                    evtController.atualizarEvento(mapCamposParaObjeto());
                 }else if(this.acao == INSERIR){
-                    EventoController.inserirEvento(mapCamposParaObjeto());
+                    evtController.inserirEvento(mapCamposParaObjeto());
                 }
                 this.dispose();
                 break;
@@ -288,6 +288,7 @@ public class EditEventoDialog extends javax.swing.JDialog {
     private int acao;
     private static final int ATUALIZAR = 0;
     private static final int INSERIR = 1;
+    private EventoController evtController = new EventoController();
     
     private void editTituloLbl(String titulo){
       tituloLbl.setText(titulo);
@@ -314,9 +315,9 @@ public class EditEventoDialog extends javax.swing.JDialog {
     private Evento mapCamposParaObjeto(){
         Evento evento = new Evento(
                 Integer.parseInt(idTxt.getText()),
+                nomeTxt.getText(),
                 dataTxt.getText(),
                 horaTxt.getText(),
-                nomeTxt.getText(),
                 StatusEvento.toEnum((String)situacaoCbb.getSelectedItem()).getCod()
         );
         

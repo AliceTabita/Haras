@@ -4,14 +4,12 @@
  */
 package br.com.haras.view;
 
+
 import br.com.haras.controller.EventoController;
 import br.com.haras.model.Evento;
+import br.com.haras.model.enums.StatusEvento;
 import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.text.Normalizer;
-import java.util.HashMap;
-import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -27,11 +25,13 @@ public class FrMenu extends javax.swing.JFrame {
      */
     public FrMenu() {
         initComponents();
-        ImageIcon icone = new ImageIcon("icon.svg");
+        ImageIcon icone = new ImageIcon(getClass().getResource("/gui/CAVALO1.png"));
         this.setIconImage(icone.getImage());
         this.atualizarTabelaEventos();
         this.setSize(1080,720);
         this.getContentPane().setBackground(Color.decode("#D9C7B8"));
+        this.setSituacaoComboBox();
+        
         this.setVisible(true);
        
         
@@ -56,6 +56,7 @@ public class FrMenu extends javax.swing.JFrame {
         eventosTable = new javax.swing.JTable();
         novoEventoBtn = new javax.swing.JButton();
         excluirEventoBtn = new javax.swing.JButton();
+        situacaoCbb = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         propCadMenu = new javax.swing.JMenuItem();
@@ -88,6 +89,7 @@ public class FrMenu extends javax.swing.JFrame {
         setForeground(new java.awt.Color(153, 102, 0));
         setMinimumSize(new java.awt.Dimension(1080, 720));
         setName("FrMenu"); // NOI18N
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(64, 36, 20));
@@ -132,6 +134,18 @@ public class FrMenu extends javax.swing.JFrame {
         excluirEventoBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 excluirEventoBtnActionPerformed(evt);
+            }
+        });
+
+        situacaoCbb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        situacaoCbb.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                situacaoCbbItemStateChanged(evt);
+            }
+        });
+        situacaoCbb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                situacaoCbbMouseClicked(evt);
             }
         });
 
@@ -222,7 +236,10 @@ public class FrMenu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(situacaoCbb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(96, 96, 96)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(novoEventoBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -232,9 +249,14 @@ public class FrMenu extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(274, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addContainerGap(270, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(22, 22, 22))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(situacaoCbb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -248,7 +270,10 @@ public class FrMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void propCadMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_propCadMenuActionPerformed
-        // TODO add your handling code here:
+        ClienteGUI cliente = new ClienteGUI();
+        cliente.setVisible(true);
+        this.dispose();
+        
     }//GEN-LAST:event_propCadMenuActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
@@ -293,13 +318,21 @@ public class FrMenu extends javax.swing.JFrame {
            int linha = eventosTable.getSelectedRow();
            int result = JOptionPane.showConfirmDialog(rootPane, "Deseja excluir o evento  " + eventosTable.getValueAt(linha, 1)+" ? ");
            if(result == JOptionPane.OK_OPTION){
-            EventoController.excluirEvento((int)(eventosTable.getValueAt(linha, 0)));
+            evtController.excluirEvento((int)(eventosTable.getValueAt(linha, 0)));
             this.atualizarTabelaEventos();
            }
-       }catch(ArrayIndexOutOfBoundsException e){
+       }catch(IndexOutOfBoundsException e){
            JOptionPane.showMessageDialog(rootPane, "Nenhum evento foi selecionado");
        }
     }//GEN-LAST:event_excluirEventoBtnActionPerformed
+
+    private void situacaoCbbItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_situacaoCbbItemStateChanged
+        System.out.println(situacaoCbb.getSelectedItem());
+    }//GEN-LAST:event_situacaoCbbItemStateChanged
+
+    private void situacaoCbbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_situacaoCbbMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_situacaoCbbMouseClicked
 
     /**
      * @param args the command line arguments
@@ -363,6 +396,7 @@ public class FrMenu extends javax.swing.JFrame {
     private javax.swing.JButton novoEventoBtn;
     private javax.swing.JMenuItem propCadMenu;
     private javax.swing.JMenuItem propFaturaMenu;
+    private javax.swing.JComboBox<String> situacaoCbb;
     // End of variables declaration//GEN-END:variables
     private EventoController evtController = new EventoController();
     private static final int ATUALIZAR = 0;
@@ -371,7 +405,14 @@ public class FrMenu extends javax.swing.JFrame {
     private void atualizarTabelaEventos(){  
         eventosTable.setModel(evtController.atualizarTabela());
     }
-    
+     private void setSituacaoComboBox(){
+         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        for (StatusEvento x : StatusEvento.values()){
+            model.addElement(x.getDescricao());
+        }
+        situacaoCbb.setModel(model);
+        situacaoCbb.setFocusable(false);
+    }
 //    private Evento retornaLinhaSelecionada(int linha){
 //        int qtdColuna = eventosTable.getColumnCount();
 //        Map<String,Object> dados = new HashMap<>();

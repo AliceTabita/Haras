@@ -5,23 +5,32 @@
 package br.com.haras.model;
 
 import br.com.haras.model.enums.StatusEvento;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.annotation.processing.Generated;
 
 
 /**
  *
  * @author alice
  */
-
+@Entity
+@NoArgsConstructor
+@Data
 public class Evento {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
     private String data;
     private String hora;
     private String situacao; 
 
-    public Evento(){
-        
-    }
     public Evento(int id,String nome, String data, String hora, int situacao) {
         this.id = id;
         this.nome = nome;
@@ -29,50 +38,4 @@ public class Evento {
         this.hora = hora;
         this.situacao = StatusEvento.toEnum(situacao).getDescricao();
     }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public String getHora() {
-        return hora;
-    }
-
-    public void setHora(String hora) {
-        this.hora = hora;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getSituacao() {
-        return situacao;
-    }
-
-    public void setSituacao(String situacao) {
-        this.situacao = situacao;
-    }
-
-    @Override
-    public String toString() {
-        return "Evento{" + "id=" + id + ", nome=" + nome + ", data=" + data + ", hora=" + hora + ", situacao=" + situacao + '}';
-    }
-
 }
