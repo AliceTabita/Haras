@@ -37,7 +37,7 @@ public abstract class Dao<T>  {
     public boolean delete(T obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
-        this.entityManager.merge(obj);
+        obj = entityManager.merge(obj);
         this.entityManager.remove(obj);
         this.entityManager.getTransaction().commit();
         this.entityManager.close();
