@@ -4,11 +4,10 @@
  */
 package br.com.haras.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 /**
  *
@@ -22,12 +21,14 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int idCliente;
     private String nome;
     private String email;
     private String telefone;
     private String sexo;
     private String cpf;
+    @OneToMany(mappedBy = "proprietario")
+    private List<Equino> lsEquino;
 
     public Cliente(String nome, String email, String telefone, String sexo, String cpf) {
         this.nome = nome;
