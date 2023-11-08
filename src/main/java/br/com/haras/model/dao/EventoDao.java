@@ -1,10 +1,9 @@
 package br.com.haras.model.dao;
 
-import br.com.haras.model.Cliente;
 import br.com.haras.model.Evento;
-import br.com.haras.model.enums.StatusEvento;
+import br.com.haras.model.enums.Status;
 import br.com.haras.model.util.DatabaseJPA;
-import jakarta.persistence.EntityManager;
+
 import java.util.List;
 
 public class EventoDao extends Dao<Evento> {
@@ -42,8 +41,8 @@ public class EventoDao extends Dao<Evento> {
         return lsEvento;
     }
 
-    public List<Evento> filterByStatus(String status) {
-        String jpql = "SELECT e FROM Evento e WHERE e.situacao like :status";
+    public List<Evento> filterByStatus(Status status) {
+        String jpql = "SELECT e FROM Evento e WHERE e.situacao = :status";
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         List<Evento> eventos = entityManager.createQuery(jpql, Evento.class)
                 .setParameter("status", status + "%")
