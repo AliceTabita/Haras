@@ -53,7 +53,7 @@ public class TMCliente extends AbstractTableModel{
                 case -1:
                     return cliente;
                 case ID:
-                    return cliente.getId();
+                    return cliente.getIdCliente();
                 case NOME:
                     return cliente.getNome();
                 case EMAIL:
