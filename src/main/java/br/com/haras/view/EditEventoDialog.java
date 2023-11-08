@@ -6,10 +6,9 @@ package br.com.haras.view;
 
 import br.com.haras.controller.EventoController;
 import br.com.haras.model.Evento;
-import br.com.haras.model.enums.StatusEvento;
+import br.com.haras.model.enums.Status;
 import java.awt.Color;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -63,7 +62,6 @@ public class EditEventoDialog extends javax.swing.JDialog {
         nomeLbl1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setResizable(false);
 
         tituloLbl.setFont(new java.awt.Font("Yu Gothic UI", 0, 24)); // NOI18N
         tituloLbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -110,6 +108,7 @@ public class EditEventoDialog extends javax.swing.JDialog {
             }
         });
 
+        idTxt.setEditable(false);
         idTxt.setText("0");
         idTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -295,7 +294,7 @@ public class EditEventoDialog extends javax.swing.JDialog {
     }
     private void setSituacaoComboBox(){
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
-        for (StatusEvento x : StatusEvento.values()){
+        for (Status x : Status.values()){
             model.addElement(x.getDescricao());
         }
         situacaoCbb.setModel(model);
@@ -318,7 +317,7 @@ public class EditEventoDialog extends javax.swing.JDialog {
                 nomeTxt.getText(),
                 dataTxt.getText(),
                 horaTxt.getText(),
-                StatusEvento.toEnum((String)situacaoCbb.getSelectedItem()).getCod()
+                Status.toEnum((String)situacaoCbb.getSelectedItem()).getCod()
         );
         
         return evento;

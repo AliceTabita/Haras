@@ -7,7 +7,7 @@ package br.com.haras.view;
 
 import br.com.haras.controller.EventoController;
 import br.com.haras.model.Evento;
-import br.com.haras.model.enums.StatusEvento;
+import br.com.haras.model.enums.Status;
 import java.awt.Color;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -407,7 +407,7 @@ public class FrMenu extends javax.swing.JFrame {
     }
      private void setSituacaoComboBox(){
          DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
-        for (StatusEvento x : StatusEvento.values()){
+        for (Status x : Status.values()){
             model.addElement(x.getDescricao());
         }
         situacaoCbb.setModel(model);
