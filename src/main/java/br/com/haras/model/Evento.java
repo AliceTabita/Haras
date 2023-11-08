@@ -4,15 +4,13 @@
  */
 package br.com.haras.model;
 
-import br.com.haras.model.enums.StatusEvento;
+import br.com.haras.model.enums.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.annotation.processing.Generated;
 
 
 /**
@@ -29,13 +27,13 @@ public class Evento {
     private String nome;
     private String data;
     private String hora;
-    private String situacao; 
+    private Status situacao;
 
     public Evento(int id,String nome, String data, String hora, int situacao) {
         this.id = id;
         this.nome = nome;
         this.data = data;
         this.hora = hora;
-        this.situacao = StatusEvento.toEnum(situacao).getDescricao();
+        this.situacao = Status.toEnum(situacao);
     }
 }
