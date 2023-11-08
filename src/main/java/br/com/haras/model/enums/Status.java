@@ -8,15 +8,18 @@ package br.com.haras.model.enums;
  *
  * @author alice
  */
-public enum StatusEvento {
+
+public enum Status {
     
     CONFIRMADO(1, "Confirmado"),
-    CANCELADO(2, "Cancelado");
-    
+    CANCELADO(2, "Cancelado"),
+    FINALIZADO(3, "Finalizado"),
+    ATIVO(4, "Ativo");
+
     private int cod;
     private String descricao;
 
-    StatusEvento(int cod, String descricao) {
+    Status(int cod, String descricao) {
         this.cod = cod;
         this.descricao = descricao;
     }
@@ -37,22 +40,22 @@ public enum StatusEvento {
         this.descricao = descricao;
     }
     
-    public static StatusEvento toEnum(Integer cod){
+    public static Status toEnum(Integer cod){
         if (cod==null){
             return null;
         }
-        for (StatusEvento x: StatusEvento.values()){
+        for (Status x: Status.values()){
             if(cod.equals(x.getCod())){
                 return x;
             }
         }
         throw new IllegalArgumentException("Id inválido "+cod);
     }
-    public static StatusEvento toEnum(String cod){
+    public static Status toEnum(String cod){
         if (cod==null){
             return null;
         }
-        for (StatusEvento x: StatusEvento.values()){
+        for (Status x: Status.values()){
             if(cod.equals(x.getDescricao())){
                 return x;
             }
