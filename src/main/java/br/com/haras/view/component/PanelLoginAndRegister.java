@@ -5,6 +5,7 @@
 package br.com.haras.view.component;
 
 
+import br.com.haras.view.component.swing.MyFormattedTextField;
 import br.com.haras.view.component.swing.MyTextField;
 import com.raven.swing.MyButton;
 import com.raven.swing.MyPasswordField;
@@ -16,9 +17,11 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.text.MaskFormatter;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -42,18 +45,27 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         label.setFont(new Font("sansserif",1,30));
         label.setForeground(new Color(74,37,20));
         register.add(label);
-        MyTextField txtUser = new MyTextField();
+        
+        MyFormattedTextField txtUser = new MyFormattedTextField();
+        try{
+        MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
+        maskCpf.install(txtUser);
+        }catch(ParseException e){
+            
+        }
         txtUser.setPrefixIcon(new ImageIcon(getClass().getResource("/imgs/user.png")));
-        txtUser.setHint("Nome");
         register.add(txtUser,"w 60%");
+        
         MyTextField txtEmail = new MyTextField();
         txtEmail.setPrefixIcon(new ImageIcon(getClass().getResource("/imgs/email.png")));
         txtEmail.setHint("Email");
         register.add(txtEmail,"w 60%");
+        
         MyPasswordField txtPassword = new MyPasswordField();
         txtPassword.setPrefixIcon(new ImageIcon(getClass().getResource("/imgs/senha.png")));
         txtPassword.setHint("Senha");
         register.add(txtPassword,"w 60%");
+        
         MyButton btn = new MyButton();
         btn.setBackground(new Color(74,37,20));
         btn.setForeground(new Color(250,250,250));
