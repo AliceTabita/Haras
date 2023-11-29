@@ -37,3 +37,8 @@ build/
 ### Mac OS ###
 .DS_Store
 /nb-configuration.xml
+
+.log
+/hs_err_pid9228.log
+/.idea/aws.xml
+/.idea/vcs.xml
