@@ -14,7 +14,8 @@ public enum Status {
     CONFIRMADO(1, "Confirmado"),
     CANCELADO(2, "Cancelado"),
     FINALIZADO(3, "Finalizado"),
-    ATIVO(4, "Ativo");
+    ATIVO(4, "Ativo"),
+    PENDENTE(5,"Pendente");
 
     private int cod;
     private String descricao;
