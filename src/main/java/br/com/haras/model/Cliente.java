@@ -29,7 +29,8 @@ public class Cliente {
     private String cpf;
     @OneToMany(mappedBy = "proprietario")
     private List<Equino> lsEquino;
-
+    @OneToOne(cascade = CascadeType.ALL)
+    private Usuario usuario;
     public Cliente(String nome, String email, String telefone, String sexo, String cpf) {
         this.nome = nome;
         this.email = email;

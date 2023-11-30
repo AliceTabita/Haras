@@ -2,6 +2,7 @@ package br.com.haras.model.dao;
 
 import br.com.haras.model.Cliente;
 import br.com.haras.model.util.DatabaseJPA;
+import br.com.haras.model.valid.exceptions.ObjectNotFoundException;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class ClienteDao extends Dao<Cliente>{
         return lsCliente;
     }
 
-    public Cliente findByCpf(String cpf) {
+    public Cliente findByCpf(String cpf){
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         jpql = " SELECT c "
@@ -41,7 +42,7 @@ public class ClienteDao extends Dao<Cliente>{
         this.entityManager.close();
 
         if (lsCliente.isEmpty()) {
-            return null;
+            throw new ObjectNotFoundException("Não foi possível localizar um cliente com o cpf" + cpf + " .");
         } else {
             return (Cliente) lsCliente.get(0);
         }

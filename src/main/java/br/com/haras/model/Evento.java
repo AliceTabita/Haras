@@ -6,6 +6,8 @@ package br.com.haras.model;
 
 import br.com.haras.model.enums.Status;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,6 +29,7 @@ public class Evento {
     private String nome;
     private String data;
     private String hora;
+    @Enumerated(EnumType.STRING)
     private Status situacao;
 
     public Evento(int id,String nome, String data, String hora, int situacao) {

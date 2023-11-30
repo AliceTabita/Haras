@@ -42,3 +42,4 @@ build/
 /hs_err_pid9228.log
 /.idea/aws.xml
 /.idea/vcs.xml
+/src/main/resources/email.properties
