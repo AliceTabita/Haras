@@ -5,10 +5,10 @@
 package br.com.haras.view.component;
 
 
+import br.com.haras.view.component.swing.MyButton;
 import br.com.haras.view.component.swing.MyFormattedTextField;
+import br.com.haras.view.component.swing.MyPasswordField;
 import br.com.haras.view.component.swing.MyTextField;
-import com.raven.swing.MyButton;
-import com.raven.swing.MyPasswordField;
 import java.awt.Button;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -16,8 +16,10 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.HashMap;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -30,17 +32,22 @@ import net.miginfocom.swing.MigLayout;
  */
 public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
 
+    private HashMap<String,String> cadastro;
+
+    public HashMap<String, String> getCadastro() {
+        return cadastro;
+    }
     
-    public PanelLoginAndRegister(ActionListener eventRegister) {
+    public PanelLoginAndRegister(ActionListener eventRegister, ActionListener eventLogin) {
         initComponents();
         initRegister(eventRegister);
-        initLogin();
+        initLogin(eventLogin);
         login.setVisible(false);
         register.setVisible(true);
        
     }
     private void initRegister(ActionListener eventRegister){
-        register.setLayout(new MigLayout("wrap","push[center]push","push[]25[]10[]10[]25[]push"));
+        register.setLayout(new MigLayout("wrap","push[center]push","push[]25[]10[]25[]push"));
         JLabel label = new JLabel("Cadastre-se");
         label.setFont(new Font("sansserif",1,30));
         label.setForeground(new Color(74,37,20));
@@ -48,32 +55,40 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         
         MyFormattedTextField txtUser = new MyFormattedTextField();
         try{
-        MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
-        maskCpf.install(txtUser);
+            MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
+            maskCpf.install(txtUser);
         }catch(ParseException e){
             
         }
         txtUser.setPrefixIcon(new ImageIcon(getClass().getResource("/imgs/user.png")));
         register.add(txtUser,"w 60%");
         
-        MyTextField txtEmail = new MyTextField();
-        txtEmail.setPrefixIcon(new ImageIcon(getClass().getResource("/imgs/email.png")));
-        txtEmail.setHint("Email");
-        register.add(txtEmail,"w 60%");
         
         MyPasswordField txtPassword = new MyPasswordField();
         txtPassword.setPrefixIcon(new ImageIcon(getClass().getResource("/imgs/senha.png")));
         txtPassword.setHint("Senha");
         register.add(txtPassword,"w 60%");
         
-        MyButton btn = new MyButton();
-        btn.setBackground(new Color(74,37,20));
-        btn.setForeground(new Color(250,250,250));
-        btn.addActionListener(eventRegister);
-        btn.setText("Sign up");
-        register.add(btn, "w 40%, h 40");
+        MyButton btnCadastrar = new MyButton();
+        btnCadastrar.setBackground(new Color(74,37,20));
+        btnCadastrar.setForeground(new Color(250,250,250));
+        btnCadastrar.addActionListener(eventRegister);
+        btnCadastrar.setFocusable(false);
+        btnCadastrar.setText("Cadastrar");
+        register.add(btnCadastrar, "w 40%, h 40");
+        btnCadastrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev){
+                String cpf = txtUser.getText().replaceAll("[^0-9]", "").trim();
+                
+                String senha = String.valueOf(txtPassword.getPassword());
+                cadastro = new HashMap<>();
+                cadastro.put("cpf",cpf);
+                cadastro.put("senha",senha);
+            }
+        });
     }
-    private void initLogin(){
+    private void initLogin(ActionListener eventLogin){
         login.setLayout(new MigLayout("wrap","push[center]push","push[]25[]10[]10[]25[]push"));
         JLabel label = new JLabel("Login");
         label.setFont(new Font("sansserif",1,30));
@@ -102,6 +117,8 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         btnEntrar.setBackground(new Color(74,37,20));
         btnEntrar.setForeground(new Color(250,250,250));
         btnEntrar.setText("Entrar");
+        btnEntrar.setFocusable(false);
+        btnEntrar.addActionListener(eventLogin);
         login.add(btnEntrar, "w 40%, h 40");
     }
     public void showRegister(boolean show){

@@ -4,15 +4,21 @@
  */
 package br.com.haras.view;
 
+import br.com.haras.controller.CadastroUsuarioController;
+import br.com.haras.model.MensagemModel;
+import br.com.haras.view.component.Message;
 import br.com.haras.view.component.PanelCover;
 import br.com.haras.view.component.PanelLoading;
 import br.com.haras.view.component.PanelLoginAndRegister;
+import br.com.haras.view.component.PanelVerifyCode;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.HashMap;
 import java.util.Locale;
 import javax.swing.ImageIcon;
+import javax.swing.JLayeredPane;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
@@ -30,6 +36,7 @@ public class Login extends javax.swing.JFrame {
     private MigLayout layout;
     private PanelCover cover;
     private PanelLoginAndRegister loginAndRegister;
+    private PanelVerifyCode verifyCode;
     private PanelLoading loading;
     private boolean inLogin;
     private final double addSize = 30;
@@ -47,14 +54,22 @@ public class Login extends javax.swing.JFrame {
         layout = new MigLayout("fill, insets 0");
         cover = new PanelCover();
         loading = new PanelLoading();
+        verifyCode= new PanelVerifyCode();
         ActionListener eventRegister = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 register();
             }
         };
+        ActionListener eventLogin = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                login();
+            }
+        };
         
-        loginAndRegister = new PanelLoginAndRegister(eventRegister);
+        
+        loginAndRegister = new PanelLoginAndRegister(eventRegister, eventLogin);
         TimingTarget target = new TimingTargetAdapter() {
             @Override
             public void timingEvent(float fraction) {
@@ -103,7 +118,10 @@ public class Login extends javax.swing.JFrame {
         animator.setDeceleration(0.5f);
         animator.setResolution(0);  //  for smooth animation
         bg.setLayout(layout);
+        bg.setLayer(loading, JLayeredPane.POPUP_LAYER);
+        bg.setLayer(verifyCode, JLayeredPane.POPUP_LAYER);
         bg.add(loading,"pos 0 0 100% 100%");
+        bg.add(verifyCode,"pos 0 0 100% 100%");
         bg.add(cover, "width " + coverSize + "%, pos " + (inLogin ? "1al" : "0al") + " 0 n 100%");
         bg.add(loginAndRegister, "width " + loginSize + "%, pos " + (inLogin ? "0al" : "1al") + " 0 n 100%"); //  1al as 100%
         loginAndRegister.showRegister(!inLogin);
@@ -116,9 +134,61 @@ public class Login extends javax.swing.JFrame {
                 }
             }
         });
+        verifyCode.addEvtButtonOk(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                try{
+                    if(cadastroUsuarioController.validaCodigo(verifyCode.getInputCode(),loginAndRegister.getCadastro().get("cpf"))){
+                        showMessage(Message.MessageType.SUCCESS, "Cadastro reaizado com sucesso");
+                        verifyCode.setVisible(false);
+                    }else{
+                        showMessage(Message.MessageType.ERROR, "Código incorreto");
+                    }
+                }catch(Exception e){
+                    showMessage(Message.MessageType.ERROR, "Erro");
+                }
+                
+                
+            }
+            
+        });
     }
+    
     private void register(){
-        System.out.print("click");
+        HashMap<String,String> cadastro = loginAndRegister.getCadastro();
+        
+        String retorno = cadastroUsuarioController.cadastrar(cadastro.get("cpf"), cadastro.get("senha"));
+        if(retorno != null){
+            showMessage(Message.MessageType.ERROR, retorno);
+        }else{
+            sendMail(cadastro.get("cpf"));
+        }
+        
+    }
+    
+    private void sendMail(String cpf){
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                loading.setVisible(true);
+                MensagemModel msg =  cadastroUsuarioController.sendEmail(cpf);
+                if(msg.isSucesso()){
+                    loading.setVisible(false);
+                    verifyCode.setVisible(true);
+                }else{
+                    loading.setVisible(false);
+                    showMessage(Message.MessageType.ERROR, msg.getMensagem());
+                }
+            }
+            
+        }).start();
+    }
+    
+    private void login(){
+        
+            loading.setVisible(true);
+            
+        System.out.println("login");
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -132,7 +202,6 @@ public class Login extends javax.swing.JFrame {
         bg = new javax.swing.JLayeredPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setUndecorated(true);
 
         bg.setBackground(new java.awt.Color(255, 255, 255));
         bg.setOpaque(true);
@@ -197,7 +266,62 @@ public class Login extends javax.swing.JFrame {
             }
         });
     }
+    private void showMessage(Message.MessageType  messageType, String message){
+        Message ms = new Message();
+        ms.showMessage(messageType, message);
+        TimingTarget target = new TimingTargetAdapter(){
+            @Override
+            public void begin() {
+                if(!ms.isShow()){
+                    bg.add(ms,"pos 0.5al -30",0);
+                    ms.setVisible(true);
+                    bg.repaint();
+                }
+            }
 
+            @Override
+            public void timingEvent(float fraction) {
+                float f;   
+                if (ms.isShow()){
+                    f= 40 *(1f- fraction);
+                }else{
+                    f= 40 * fraction;
+                }
+                layout.setComponentConstraints(ms, "pos 0.5al "+(int)(f - 30));
+                bg.repaint();
+                bg.revalidate();
+            }
+
+            @Override
+            public void end() {
+                if(ms.isShow()){
+                    bg.remove(ms);
+                    bg.repaint();
+                    bg.revalidate();
+                }else{
+                    ms.setShow(true);
+                }
+            }
+            
+        };
+        Animator animator = new Animator(300, target);
+        animator.setResolution(0);
+        animator.setAcceleration(0.5f);
+        animator.setDeceleration(0.5f);
+        animator.start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(4000);
+                    animator.start();
+                } catch (InterruptedException e) {
+                    System.err.println(e);
+                }
+            }
+        }).start();
+    }
+    private final CadastroUsuarioController cadastroUsuarioController = new CadastroUsuarioController();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane bg;
     // End of variables declaration//GEN-END:variables
