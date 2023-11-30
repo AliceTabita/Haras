@@ -1,5 +1,7 @@
 package br.com.haras.model.valid;
 
+import br.com.haras.model.valid.exceptions.InvalidCpfException;
+
 public class CPFValidator {
     public static boolean isValidCPF(String cpf) {
 
@@ -7,7 +9,7 @@ public class CPFValidator {
 
 
         if (cpf.length() != 11) {
-            return false;
+            throw new InvalidCpfException("CPF Inválido");
         }
 
         boolean todosDigitosIguais = true;
@@ -19,7 +21,7 @@ public class CPFValidator {
         }
 
         if (todosDigitosIguais) {
-            return false;
+           throw new InvalidCpfException("CPF Inválido - todos os digitos iguais");
         }
 
 
@@ -37,7 +39,7 @@ public class CPFValidator {
         int dv1 = (resto1 < 2) ? 0 : 11 - resto1;
 
         if (digitos[9] != dv1) {
-            return false;
+            throw new InvalidCpfException("CPF Inválido");
         }
 
         int soma2 = 0;
@@ -47,7 +49,9 @@ public class CPFValidator {
 
         int resto2 = soma2 % 11;
         int dv2 = (resto2 < 2) ? 0 : 11 - resto2;
-
-        return digitos[10] == dv2;
+        if(!(digitos[10] == dv2)){
+            throw new InvalidCpfException("CPF Inválido");
+        }
+        return true;
     }
 }
