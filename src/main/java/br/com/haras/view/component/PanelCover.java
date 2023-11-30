@@ -4,7 +4,7 @@
  */
 package br.com.haras.view.component;
 
-import com.raven.swing.ButtonOutLine;
+import br.com.haras.view.component.swing.ButtonOutLine;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
