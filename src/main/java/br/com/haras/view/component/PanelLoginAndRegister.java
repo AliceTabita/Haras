@@ -33,9 +33,13 @@ import net.miginfocom.swing.MigLayout;
 public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
 
     private HashMap<String,String> cadastro;
-
+    private HashMap<String,String> loginInfo;
+    
     public HashMap<String, String> getCadastro() {
         return cadastro;
+    }
+    public HashMap<String, String> getLoginInfo() {
+        return loginInfo;
     }
     
     public PanelLoginAndRegister(ActionListener eventRegister, ActionListener eventLogin) {
@@ -120,6 +124,17 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         btnEntrar.setFocusable(false);
         btnEntrar.addActionListener(eventLogin);
         login.add(btnEntrar, "w 40%, h 40");
+        btnEntrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev){
+                String email = txtEmail.getText().trim();
+                
+                String senha = String.valueOf(txtPassword.getPassword());
+                loginInfo = new HashMap<>();
+                loginInfo.put("email",email);
+                loginInfo.put("senha",senha);
+            }
+        });
     }
     public void showRegister(boolean show){
         if(show){

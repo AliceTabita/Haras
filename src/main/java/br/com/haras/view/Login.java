@@ -5,6 +5,7 @@
 package br.com.haras.view;
 
 import br.com.haras.controller.CadastroUsuarioController;
+import br.com.haras.controller.LoginController;
 import br.com.haras.model.MensagemModel;
 import br.com.haras.view.component.Message;
 import br.com.haras.view.component.PanelCover;
@@ -185,10 +186,12 @@ public class Login extends javax.swing.JFrame {
     }
     
     private void login(){
-        
-            loading.setVisible(true);
-            
-        System.out.println("login");
+        HashMap<String, String> loginInfo = loginAndRegister.getLoginInfo();
+        if(loginController.validaLogin(loginInfo.get("email"),loginInfo.get("senha"))){
+            showMessage(Message.MessageType.SUCCESS, "Sucesso");
+        }else{
+            showMessage(Message.MessageType.ERROR, "Email e/ou senha incorretos");
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -322,6 +325,7 @@ public class Login extends javax.swing.JFrame {
         }).start();
     }
     private final CadastroUsuarioController cadastroUsuarioController = new CadastroUsuarioController();
+    private final LoginController loginController = new LoginController();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane bg;
     // End of variables declaration//GEN-END:variables
