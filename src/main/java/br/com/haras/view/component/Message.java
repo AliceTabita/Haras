@@ -45,9 +45,9 @@ public class Message extends javax.swing.JPanel {
     protected void paintComponent(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
         if (messageType == MessageType.SUCCESS) {
-            g2.setColor(new Color(231, 254, 198,100));
+            g2.setColor(new Color(231, 254, 198));
         } else {
-            g2.setColor(new Color(240, 52, 53,100));
+            g2.setColor(new Color(240, 52, 53));
         }
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
         g2.fillRect(0, 0, getWidth(), getHeight());
