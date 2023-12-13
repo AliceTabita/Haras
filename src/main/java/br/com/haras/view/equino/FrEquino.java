@@ -4,25 +4,199 @@
  */
 package br.com.haras.view.equino;
 
+import br.com.haras.controller.ClienteController;
+import br.com.haras.controller.EquinoController;
+import br.com.haras.model.Cliente;
+import br.com.haras.view.component.Message;
+import br.com.haras.view.component.PanelCover;
+import br.com.haras.view.component.swing.ButtonOutLine;
+import br.com.haras.view.component.swing.MyButton;
 import java.awt.Color;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import net.miginfocom.swing.MigLayout;
+import org.jdesktop.animation.timing.Animator;
+import org.jdesktop.animation.timing.TimingTarget;
+import org.jdesktop.animation.timing.TimingTargetAdapter;
+import br.com.haras.model.Equino;
+import br.com.haras.model.dao.ClienteDao;
+import br.com.haras.model.valid.exceptions.InvalidCpfException;
+import br.com.haras.model.valid.exceptions.ObjectNotFoundException;
+import javax.swing.JLayeredPane;
 /**
  *
  * @author alice
  */
 public class FrEquino extends javax.swing.JFrame {
-
+    private ButtonOutLine btnVoltar;
     /**
      * Creates new form FrEquino
      */
+    public FrEquino(Equino equino) {
+        //EDITAR
+        initComponents();
+        ActionListener eventSave = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                save();
+            }
+        };
+        ActionListener eventBuscarProprietario = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showPesquisa();
+            }
+        };
+        equinoPn = new EquinoPn(eventSave, equino.toHashmap(),equinoController.atualizaRacas(),equino.getProprietario(), eventBuscarProprietario);
+
+        this.setSize(1080,720);
+        init();
+       
+    }
     public FrEquino() {
         initComponents();
-       
+        ActionListener eventSave = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                save();
+            }
+        };
+        ActionListener eventBuscarProprietario = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showPesquisa();
+            }
+        };
+        equinoPn = new EquinoPn(eventSave,equinoController.atualizaRacas(), eventBuscarProprietario);
         this.setSize(1080,720);
-        this.getContentPane().setBackground(Color.decode("#D9C7B8"));
+        init();
+       
+    }
+    private void init(){
+        findProprietario = new PanelFindProprietario();
+        layout = new MigLayout("fill");
+        bg.setLayout(layout);
+        equinoController.atualizaRacas();
+        cover = new PanelCoverEquino();
+        btnVoltar = new ButtonOutLine();
+        btnVoltar.setBackground(new Color(255,255,255));
+        btnVoltar.setForeground(new Color(255,255,255));
+        btnVoltar.setText("Voltar");
+        cover.add(btnVoltar, "center,bottom, pad -20 0 -20 0, w 20%, h 5%");
+        bg.add(cover,"width 20%, pos 1al 0 n 100%");
+        bg.add(equinoPn,"width 80%, pos 0al 0 n 100%");
+        bg.setLayer(findProprietario, JLayeredPane.POPUP_LAYER);
+        bg.add(findProprietario,"pos 0 0 100% 100%");
+        
+        findProprietario.addEvtButtonOk(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                try{
+                    Cliente cli = clienteController.buscarClientePorCpf(findProprietario.getInputCpf());
+             
+                    equinoPn.setProprietario(cli);
+                    showMessage(Message.MessageType.SUCCESS, "Cliente selecionado");
+                    findProprietario.setVisible(false);
+                    
+                }catch(InvalidCpfException e){
+                    e.printStackTrace();
+                    findProprietario.setMsgWarning("Cpf inválido.");
+                    showMessage(Message.MessageType.ERROR, "Erro");
+                }catch(ObjectNotFoundException onf){
+                    findProprietario.setMsgWarning("Não foi possível localizar um cliente com esse cpf.");
+                    showMessage(Message.MessageType.ERROR, "Erro");
+                }catch(Exception ex){
+                    findProprietario.setVisible(false);
+                    showMessage(Message.MessageType.ERROR, "Erro");
+                }
+                
+                
+            }
+            
+        });
         this.setVisible(true);
     }
+    private void showPesquisa(){
+        this.findProprietario.setVisible(true);
+    }
+    private void save(){
+        try{
+            equinoPn.getEquinoInfo();
+            HashMap<String, String> eq = equinoPn.getEquinoInfo();
+            Cliente cli = equinoPn.getProprietario();
+            String retorno = equinoController.save(eq,cli);
+            System.out.println("socorro");
+            if(retorno!=null){
+                showMessage(Message.MessageType.ERROR, retorno);
+            }else{
+                showMessage(Message.MessageType.SUCCESS,"Equino salvo com sucesso.");  
+            }
+            
+        }catch(Exception e){
+           e.printStackTrace();
+           showMessage(Message.MessageType.ERROR,"Erro ao salvar equino, tente novamente.");
+        }
+    }
+    
+    
+    private void showMessage(Message.MessageType  messageType, String message){
+        Message ms = new Message();
+        //ms.setOpaque(true);
+        
+        ms.showMessage(messageType, message);
+        TimingTarget target = new TimingTargetAdapter(){
+            @Override
+            public void begin() {
+                if(!ms.isShow()){
+                    bg.add(ms,"pos 0.5al -30",0);
+                    ms.setVisible(true);
+                    bg.repaint();
+                }
+            }
 
+            @Override
+            public void timingEvent(float fraction) {
+                float f;   
+                if (ms.isShow()){
+                    f= 40 *(1f- fraction);
+                }else{
+                    f= 40 * fraction;
+                }
+                layout.setComponentConstraints(ms, "pos 0.5al "+(int)(f - 30));
+                bg.repaint();
+                bg.revalidate();
+            }
+
+            @Override
+            public void end() {
+                if(ms.isShow()){
+                    bg.remove(ms);
+                    bg.repaint();
+                    bg.revalidate();
+                }else{
+                    ms.setShow(true);
+                }
+            }
+            
+        };
+        Animator animator = new Animator(300, target);
+        animator.setResolution(0);
+        animator.setAcceleration(0.5f);
+        animator.setDeceleration(0.5f);
+        animator.start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(4000);
+                    animator.start();
+                } catch (InterruptedException e) {
+                    System.err.println(e);
+                }
+            }
+        }).start();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,92 +206,30 @@ public class FrEquino extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        bg = new javax.swing.JLayeredPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel2.setText("Custo Mensal:");
-
-        jLabel3.setText("id:");
-
-        jLabel4.setText("Data de nascimento:");
-
-        jLabel5.setText("Raça:");
-
-        jLabel6.setText("Nome:");
-
-        jLabel7.setText("Peso:");
-
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Cadastro de Equinos");
-
-        jTextField1.setText("jTextField1");
-
-        jTextField2.setText("jTextField2");
-
-        jTextField3.setText("jTextField3");
+        javax.swing.GroupLayout bgLayout = new javax.swing.GroupLayout(bg);
+        bg.setLayout(bgLayout);
+        bgLayout.setHorizontalGroup(
+            bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 949, Short.MAX_VALUE)
+        );
+        bgLayout.setVerticalGroup(
+            bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 506, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(420, 420, 420)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(441, 441, 441)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))))
-                .addGap(420, 420, 420))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(214, 214, 214)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4))
-                .addGap(250, 250, 250))
+            .addComponent(bg)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(105, 105, 105)
-                .addComponent(jLabel1)
-                .addGap(30, 30, 30)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(133, 133, 133))
+            .addComponent(bg)
         );
 
         pack();
@@ -153,21 +265,17 @@ public class FrEquino extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrEquino().setVisible(true);
+                new FrEquino(null).setVisible(true);
             }
         });
     }
-
+    private EquinoPn equinoPn;
+    private MigLayout layout;
+    private PanelCoverEquino cover;
+    private EquinoController equinoController = new EquinoController();
+    private PanelFindProprietario findProprietario;
+    private ClienteController clienteController = new ClienteController();
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JLayeredPane bg;
     // End of variables declaration//GEN-END:variables
 }
