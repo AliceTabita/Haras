@@ -1,14 +1,11 @@
 package br.com.haras.controller;
 
 import br.com.haras.model.Cliente;
-import br.com.haras.model.Evento;
 import br.com.haras.model.dao.ClienteDao;
 import br.com.haras.model.tables.TMCliente;
-import br.com.haras.model.tables.TMEventos;
 import br.com.haras.model.valid.CPFValidator;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class ClienteController {
@@ -52,6 +49,13 @@ public class ClienteController {
             return new TMCliente(lsCliente);
         }else {
             return new TMCliente(clienteRepository.filterByName(parametro));
+        }
+    }
+    public Cliente buscarClientePorCpf(String cpf){
+        if(CPFValidator.isValidCPF(cpf)){
+            return clienteRepository.findByCpf(cpf);
+        }else{
+            return null;
         }
     }
 
