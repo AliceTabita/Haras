@@ -5,18 +5,13 @@
 package br.com.haras.controller.service;
 
 import br.com.haras.model.MensagemModel;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
+
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.commons.mail.*;
 
 /**
  *
@@ -99,7 +94,7 @@ public class EmailService {
         String html = this.readHtmlCodeEmail();
         html = html.replace("{{NOME}}", nome);
         html = html.replace("{{CODIGO}}", codigo);
-        System.out.print(html);
+
         return html;
     }
    

@@ -7,23 +7,19 @@ package br.com.haras.view;
 import br.com.haras.controller.CadastroUsuarioController;
 import br.com.haras.controller.LoginController;
 import br.com.haras.model.MensagemModel;
-import br.com.haras.view.component.Message;
-import br.com.haras.view.component.PanelCover;
-import br.com.haras.view.component.PanelLoading;
-import br.com.haras.view.component.PanelLoginAndRegister;
-import br.com.haras.view.component.PanelVerifyCode;
+import br.com.haras.view.component.*;
+import net.miginfocom.swing.MigLayout;
+import org.jdesktop.animation.timing.Animator;
+import org.jdesktop.animation.timing.TimingTarget;
+import org.jdesktop.animation.timing.TimingTargetAdapter;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
 import java.util.Locale;
-import javax.swing.ImageIcon;
-import javax.swing.JLayeredPane;
-import net.miginfocom.swing.MigLayout;
-import org.jdesktop.animation.timing.Animator;
-import org.jdesktop.animation.timing.TimingTarget;
-import org.jdesktop.animation.timing.TimingTargetAdapter;
 
 /**
  *
