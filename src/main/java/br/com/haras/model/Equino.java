@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity
@@ -23,13 +24,26 @@ public class Equino {
     private Raca raca;
     private String nome;
     private BigDecimal vlCustoMensal;
-
+    private float vlPeso;
     @OneToMany(mappedBy = "equino")
     private List<Tratamento> lsTratamento;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="cliente_id", referencedColumnName = "idCliente")
     private Cliente proprietario;
     @ManyToOne
     @JoinColumn(name="funcao_id")
     private Funcao funcao;
+    
+    public HashMap<String,String> toHashmap(){
+        HashMap<String, String> eqHash = new HashMap<>();
+        eqHash.put("nome", this.nome);
+        eqHash.put("proprietario", this.proprietario.getNome());
+        eqHash.put("raca", this.raca.getNome());
+        eqHash.put("idRaca", String.valueOf(this.raca.getIdRaca()));
+        eqHash.put("idEquino",String.valueOf(this.idEquino));
+        eqHash.put("dtNascimento",String.valueOf(this.dtNascimento));
+        eqHash.put("vlPeso",String.valueOf(this.vlPeso));
+        eqHash.put("vlCustoMensal",String.valueOf(this.vlCustoMensal));
+        return eqHash;
+    }
 }

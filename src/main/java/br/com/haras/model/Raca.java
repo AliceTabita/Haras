@@ -18,6 +18,5 @@ public class Raca {
     private String nome;
     private String descricao;
 
-    @OneToMany(mappedBy = "raca")
-    private List<Equino> lsEquino;
+  
 }
