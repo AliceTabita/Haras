@@ -33,6 +33,7 @@ public class Equino {
     @ManyToOne
     @JoinColumn(name="funcao_id")
     private Funcao funcao;
+    private byte[] imagem;
     
     public HashMap<String,String> toHashmap(){
         HashMap<String, String> eqHash = new HashMap<>();

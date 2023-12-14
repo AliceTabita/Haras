@@ -28,9 +28,10 @@ public class CardAnuncio extends javax.swing.JPanel {
     public CardAnuncio(Anuncio anuncio) {
         initComponents();
         this.anuncio = anuncio;
-        this.setLayout(new MigLayout("wrap","[center]","[]20"));
+        this.setLayout(new MigLayout("wrap","[center]","[]"));
         //TODO alterar para puxar o byte array da imagem
-        //this.setByteImage(this.anuncio.getEquino());
+        this.setByteImage(this.anuncio.getEquino().getImagem());
+        this.createDetalhes();
 
     }
 
@@ -89,6 +90,9 @@ public class CardAnuncio extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
     
     private void setByteImage(byte[] imgBy){
+        if(imgBy == null){
+            return;
+        }
         ImageIcon img = new ImageIcon(imgBy);
         Image imagemAtual = img.getImage().getScaledInstance(this.imgContainer.getWidth(), this.imgContainer.getHeight(), Image.SCALE_SMOOTH);
         this.image.setIcon(new ImageIcon(imagemAtual));
@@ -97,7 +101,7 @@ public class CardAnuncio extends javax.swing.JPanel {
     private void createDetalhes(){
         Equino equino = this.anuncio.getEquino();
         Cliente anunciante = this.anuncio.getAnunciante();
-        this.detalhes.setLayout(new MigLayout("wrap","[center]","[]14[]push"));
+        this.detalhes.setLayout(new MigLayout("wrap","[center]","[]14[]"));
         
         JLabel animalName = new JLabel(equino.getNome());   
         animalName.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -118,6 +122,7 @@ public class CardAnuncio extends javax.swing.JPanel {
         info.setFont(new Font("Arial", Font.PLAIN, 12));
         info.setForeground(Color.GRAY);
         this.detalhes.add(info);
+        this.detalhes.revalidate();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
