@@ -27,7 +27,7 @@ public class Equino {
     private float vlPeso;
     @OneToMany(mappedBy = "equino")
     private List<Tratamento> lsTratamento;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name="cliente_id", referencedColumnName = "idCliente")
     private Cliente proprietario;
     @ManyToOne

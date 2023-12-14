@@ -8,9 +8,7 @@ import br.com.haras.controller.ClienteController;
 import br.com.haras.controller.EquinoController;
 import br.com.haras.model.Cliente;
 import br.com.haras.view.component.Message;
-import br.com.haras.view.component.PanelCover;
 import br.com.haras.view.component.swing.ButtonOutLine;
-import br.com.haras.view.component.swing.MyButton;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,9 +18,12 @@ import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 import br.com.haras.model.Equino;
-import br.com.haras.model.dao.ClienteDao;
+import br.com.haras.model.Raca;
 import br.com.haras.model.valid.exceptions.InvalidCpfException;
 import br.com.haras.model.valid.exceptions.ObjectNotFoundException;
+import br.com.haras.view.FrMenu;
+import java.awt.Window;
+import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 /**
  *
@@ -83,6 +84,13 @@ public class FrEquino extends javax.swing.JFrame {
         btnVoltar.setBackground(new Color(255,255,255));
         btnVoltar.setForeground(new Color(255,255,255));
         btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev){
+                new FrMenu();
+                dispose();   
+            }
+        });
         cover.add(btnVoltar, "center,bottom, pad -20 0 -20 0, w 20%, h 5%");
         bg.add(cover,"width 20%, pos 1al 0 n 100%");
         bg.add(equinoPn,"width 80%, pos 0al 0 n 100%");
@@ -126,7 +134,7 @@ public class FrEquino extends javax.swing.JFrame {
             HashMap<String, String> eq = equinoPn.getEquinoInfo();
             Cliente cli = equinoPn.getProprietario();
             String retorno = equinoController.save(eq,cli);
-            System.out.println("socorro");
+         
             if(retorno!=null){
                 showMessage(Message.MessageType.ERROR, retorno);
             }else{
