@@ -27,7 +27,7 @@ public class Cliente {
     private String telefone;
     private String sexo;
     private String cpf;
-    @OneToMany(mappedBy = "proprietario")
+    @OneToMany(mappedBy = "proprietario",fetch = FetchType.EAGER)
     private List<Equino> lsEquino;
     @OneToOne(cascade = CascadeType.ALL)
     private Usuario usuario;

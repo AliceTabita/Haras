@@ -264,9 +264,18 @@ class CamposPn extends javax.swing.JPanel{
         btnCalcular.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev){
+                 equinoInfo.put("dtNascimento",edtDtNascimento.getText().trim());
+                    equinoInfo.put("raca","");
+                    equinoInfo.put("nome", edtNome.getText());
+                    
+                    equinoInfo.put("vlPeso",edtVlPeso.getText().trim());
+                    String racaSelecionada =comboBox.getSelectedItem().toString(); 
+                    String id = racaSelecionada.substring(racaSelecionada.indexOf(".")+1);
+                    equinoInfo.put("idRaca", id);
                 BigDecimal valor = eqController.calcular(equinoInfo);
-             
-                edtVlCustoMensal.setText(formataValor(valor));
+                String vlFormatado = formataValor(valor);
+                equinoInfo.put("vlCustoMensal",vlFormatado);
+                edtVlCustoMensal.setText(vlFormatado);
             }
         });
         this.add(btnCalcular,"w 25%, span 2, left");
@@ -286,8 +295,6 @@ class CamposPn extends javax.swing.JPanel{
                 edtVlPeso.setText("");
                 equinoInfo.clear();
                 btnFindProprietario.setEnabled(true);
-                System.out.println(equinoInfo.keySet());
-                System.out.println(equinoInfo.entrySet());
                 
             }
         });

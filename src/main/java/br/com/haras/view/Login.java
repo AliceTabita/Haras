@@ -185,6 +185,8 @@ public class Login extends javax.swing.JFrame {
         HashMap<String, String> loginInfo = loginAndRegister.getLoginInfo();
         if(loginController.validaLogin(loginInfo.get("email"),loginInfo.get("senha"))){
             showMessage(Message.MessageType.SUCCESS, "Sucesso");
+            FrMenu frMenu = new FrMenu();
+            this.dispose();
         }else{
             showMessage(Message.MessageType.ERROR, "Email e/ou senha incorretos");
         }

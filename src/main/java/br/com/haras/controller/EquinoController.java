@@ -9,6 +9,7 @@ import br.com.haras.model.dao.EquinoDao;
 import java.util.HashMap;
 import br.com.haras.model.Equino;
 import br.com.haras.model.Raca;
+import br.com.haras.model.dao.ClienteDao;
 import br.com.haras.model.dao.RacaDao;
 import java.math.BigDecimal;
 import java.time.DateTimeException;
@@ -24,6 +25,7 @@ import java.util.List;
 public class EquinoController {
     private EquinoDao equinoRepository;
     private RacaDao racaDao;
+    private ClienteDao cliDao;
     private ClienteController cliController;
     private final String formatoData = "dd/MM/yyyy";
     
@@ -31,6 +33,7 @@ public class EquinoController {
         equinoRepository = new EquinoDao();
         racaDao = new RacaDao();
         cliController = new ClienteController();
+        cliDao = new ClienteDao();
     }
     public String save(HashMap<String,String> equinoInfo, Cliente cliente){
         //verficar se existe o idEquino no hashmap
@@ -55,16 +58,18 @@ public class EquinoController {
             if(equinoInfo.get("vlCustoMensal") == null || equinoInfo.get("vlCustoMensal").isEmpty()){
                 return "É necessário realizar o calculo antes de prosseguir";
             }
-            
-            if(equinoInfo.get("idEquino")== null){
-                Equino novoEquino =new Equino();
-                Cliente clienteFind = cliController.buscaClientePorId(cliente.getIdCliente());
+            Cliente clienteFind = cliDao.find(cliente.getIdCliente());
                 if(clienteFind == null){
                     return "Erro ao recuperar informações do cliente, tente novamente";
-                }
+            }
+            if(equinoInfo.get("idEquino")== null){
+                Equino novoEquino =new Equino();
+                
                 this.mapEquino(equinoInfo, dataNascimento,novoEquino);
                 novoEquino.setProprietario(clienteFind);
                 novoEquino.setRaca(raca);
+                clienteFind.getLsEquino().add(novoEquino);
+                cliDao.update(cliente);
                 equinoRepository.save(novoEquino);
             }else{
                 int idEq = Integer.valueOf( equinoInfo.get("idEquino"));
@@ -75,8 +80,8 @@ public class EquinoController {
                 }
                 
                 this.mapEquino(equinoInfo, dataNascimento, equinoUpdate);
+                equinoUpdate.setProprietario(clienteFind);
                 
-               
                 equinoUpdate.setRaca(raca);
                 
                 equinoRepository.update(equinoUpdate);
@@ -108,6 +113,15 @@ public class EquinoController {
         return lsRacaConcatenado;
     }
     public BigDecimal calcular(HashMap<String, String> equinoInfo){
-        return new BigDecimal(100.22);
+        try{
+            int idRaca = Integer.parseInt(equinoInfo.get("idRaca"));
+            Raca raca = racaDao.find(idRaca);
+            
+            return raca.getVlBaseRaca().multiply(new BigDecimal("300"));
+        }catch(NumberFormatException e){
+            return BigDecimal.ZERO;
+        }
+        
+        
     }
 }

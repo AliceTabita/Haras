@@ -8,6 +8,8 @@ package br.com.haras.view;
 import br.com.haras.controller.EventoController;
 import br.com.haras.model.Evento;
 import br.com.haras.model.enums.Status;
+import br.com.haras.view.Raca.FrRaca;
+import br.com.haras.view.equino.FrEquino;
 import java.awt.Color;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -60,7 +62,6 @@ public class FrMenu extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         propCadMenu = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
         propFaturaMenu = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
@@ -161,9 +162,6 @@ public class FrMenu extends javax.swing.JFrame {
             }
         });
         jMenu3.add(propCadMenu);
-
-        jMenuItem3.setText("Consultar");
-        jMenu3.add(jMenuItem3);
 
         propFaturaMenu.setText("Faturas");
         jMenu3.add(propFaturaMenu);
@@ -277,11 +275,13 @@ public class FrMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_propCadMenuActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        // TODO add your handling code here:
+       FrEquino frEquino = new FrEquino();
+       this.dispose();
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        // TODO add your handling code here:
+        FrRaca frRaca = new FrRaca();
+        this.dispose();
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
@@ -385,7 +385,6 @@ public class FrMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem7;

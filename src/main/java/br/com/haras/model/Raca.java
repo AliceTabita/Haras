@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,6 @@ public class Raca {
     private int idRaca;
     private String nome;
     private String descricao;
-
+    private BigDecimal vlBaseRaca;
   
 }

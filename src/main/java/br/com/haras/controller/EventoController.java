@@ -4,13 +4,10 @@
  */
 package br.com.haras.controller;
 
-import br.com.haras.model.Cliente;
 import br.com.haras.model.Evento;
 import br.com.haras.model.dao.EventoDao;
 import br.com.haras.model.tables.TMEventos;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  *

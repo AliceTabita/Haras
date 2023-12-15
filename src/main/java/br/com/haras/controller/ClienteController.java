@@ -29,14 +29,15 @@ public class ClienteController {
         if(!CPFValidator.isValidCPF(clienteNovo.getCpf())){
             return "Cpf inválido";
         }
-        Cliente clienteConsulta = clienteRepository.findByCpf(clienteNovo.getCpf());
-        if(clienteConsulta==null){
-            clienteRepository.save(clienteNovo);
-            return "Salvo com sucesso";
-        }else {
+        if(clienteNovo.getIdCliente() != 0){
+            Cliente clienteConsulta = clienteRepository.findByCpf(clienteNovo.getCpf());
             this.atualizarCliente(clienteNovo);
             return "Cliente atualizado com sucesso";
+        }else{
+            clienteRepository.save(clienteNovo);
+            return "Salvo com sucesso";
         }
+       
     }
     public  void excluirCliente(int id){
         Cliente cliente = clienteRepository.find(id);

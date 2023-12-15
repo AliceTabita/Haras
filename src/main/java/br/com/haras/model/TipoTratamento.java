@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @Entity
@@ -19,6 +18,4 @@ public class TipoTratamento {
     private String descricao;
     private String nome;
     private BigDecimal vlTratamento;
-    @OneToMany(mappedBy = "tpTratamento")
-    private List<Tratamento> lsTratamento;
 }
