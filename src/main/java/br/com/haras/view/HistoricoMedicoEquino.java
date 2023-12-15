@@ -1,3 +1,5 @@
+package br.com.haras.view;
+
 
 
 /*
@@ -5,41 +7,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import org.hibernate.SessionFactory;
-
 public class HistoricoMedicoEquino extends javax.swing.JFrame {
 
-    private Object jTextFieldConsulta;
-    private Object jTextFieldNome;
-    private Object jBtnSalvar;
-    private JTable jTableHistorico;
-    private JScrollPane jScrollPane1;
-    private JTextField jTextFieldTratamento;
-    private JLabel jLabelTratamento;
-    private JTextField jTextFieldVeterinario;
-    private JLabel jLabelVeterinario;
-    private JTextField jTextFieldProprietario;
-    private JLabel jLabelProprietario;
-    private JLabel jLabelDataConsulta;
-    private JLabel jLabelNome;
-    private JPanel jPanel2;
-    private JLabel jLabel1;
-    private JButton jBtnEditar;
-    private JButton jBtnLimpar;
-    private JButton jBtnCadastrar;
-    private JLabel jLabel2;
-    private JPanel jPanelMenu;
-}
+    
+
 
 
  
@@ -316,3 +287,4 @@ public class HistoricoMedicoEquino extends javax.swing.JFrame {
 
     void setTratamento(String tratamento) {
     }
+}
