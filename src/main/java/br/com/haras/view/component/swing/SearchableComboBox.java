@@ -5,14 +5,17 @@
 package br.com.haras.view.component.swing;
 
 import javax.swing.JComboBox;
+import lombok.Setter;
 
 /**
  *
  * @author alice
  */
+@Setter
 public class SearchableComboBox<E>  extends JComboBox<E>{
-    
+   
     public SearchableComboBox( ) {
         setUI(new ComboBoxSuggestionUI());       
     }
+  
 }

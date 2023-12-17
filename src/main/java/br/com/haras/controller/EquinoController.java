@@ -11,6 +11,8 @@ import br.com.haras.model.Equino;
 import br.com.haras.model.Raca;
 import br.com.haras.model.dao.ClienteDao;
 import br.com.haras.model.dao.RacaDao;
+import br.com.haras.model.tables.TMEquino;
+import br.com.haras.model.tables.TMRaca;
 import java.math.BigDecimal;
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -109,7 +111,7 @@ public class EquinoController {
         for(Raca raca : lsRaca){
             lsRacaConcatenado.add((String.valueOf(raca.getNome())+"."+ String.valueOf(raca.getIdRaca())));
         }
-        System.out.println(lsRacaConcatenado.get(0));
+        
         return lsRacaConcatenado;
     }
     public BigDecimal calcular(HashMap<String, String> equinoInfo){
@@ -123,5 +125,9 @@ public class EquinoController {
         }
         
         
+    }
+    public  TMEquino atualizarTabela(){
+        List<Equino> lsEquino = equinoRepository.findAll();
+        return new TMEquino(lsEquino);
     }
 }

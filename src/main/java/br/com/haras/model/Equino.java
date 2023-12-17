@@ -19,7 +19,7 @@ public class Equino {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idEquino;
     private LocalDate dtNascimento;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "raca_id", referencedColumnName = "idRaca")
     private Raca raca;
     private String nome;
@@ -27,7 +27,7 @@ public class Equino {
     private float vlPeso;
     @OneToMany(mappedBy = "equino")
     private List<Tratamento> lsTratamento;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="cliente_id", referencedColumnName = "idCliente")
     private Cliente proprietario;
     @ManyToOne
