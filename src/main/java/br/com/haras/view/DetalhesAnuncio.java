@@ -15,21 +15,14 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import net.miginfocom.swing.MigLayout;
 
 
@@ -111,7 +104,7 @@ public class DetalhesAnuncio extends javax.swing.JFrame {
         
         for (int indice = 0; indice < lsTratamento.size(); indice++) {
             Tratamento tratamento = lsTratamento.get(indice);
-            tratamentos[indice] = (tratamento.getTpTratamento().getNome() +" " + tratamento.getDtInicio().format(formatter));
+            tratamentos[indice] = (tratamento.getTpTratamento().getNome() +" " + tratamento.getDtTratamento().format(formatter));
         }
         return new JList<>(tratamentos);
     }
