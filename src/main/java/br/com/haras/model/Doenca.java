@@ -19,4 +19,8 @@ public class Doenca {
     private String DescricaoDoenca;
     @ManyToMany(mappedBy = "lsDoenca")
     private List<Tratamento> lsTratamento;
+      @Override
+    public String toString(){
+        return this.nmDoenca;
+    }
 }

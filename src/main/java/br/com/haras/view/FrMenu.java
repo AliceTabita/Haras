@@ -9,6 +9,7 @@ import br.com.haras.controller.EventoController;
 import br.com.haras.model.Evento;
 import br.com.haras.model.enums.Status;
 import br.com.haras.view.Raca.FrRaca;
+import br.com.haras.view.Tratamento.FrTratamento;
 import br.com.haras.view.equino.FrEquino;
 import java.awt.Color;
 import javax.swing.DefaultComboBoxModel;
@@ -188,6 +189,11 @@ public class FrMenu extends javax.swing.JFrame {
         jMenu5.add(jMenuItem9);
 
         jMenuItem10.setText("Registrar Tratamento");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
         jMenu5.add(jMenuItem10);
 
         jMenu4.add(jMenu5);
@@ -333,6 +339,12 @@ public class FrMenu extends javax.swing.JFrame {
     private void situacaoCbbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_situacaoCbbMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_situacaoCbbMouseClicked
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        new FrTratamento();
+        this.dispose();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -18,4 +18,9 @@ public class TipoTratamento {
     private String descricao;
     private String nome;
     private BigDecimal vlTratamento;
+    
+    @Override
+    public String toString(){
+        return this.nome;
+    }
 }

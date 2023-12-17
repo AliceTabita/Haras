@@ -27,8 +27,12 @@ public class Tratamento {
     )
     private List<Doenca> lsDoenca;
     private String txLaudoMedico;
-    private LocalDate dtInicio;
+    private LocalDate dtTratamento;
     private BigDecimal vlCustoTratamento;
+    private BigDecimal vlFinalTratamento;
+    private String posologia;
+    private String nmMedicacao;
+    private BigDecimal vlMedicacao;
     @ManyToOne()
     @JoinColumn(name = "equino_id", referencedColumnName = "idEquino")
     private Equino equino;
